@@ -9,6 +9,7 @@ public class LeapYear {
      */
     public static boolean isLeapYear(int year) {
         // Optional TODO: Fill in this method.
+        return true;
     }
 
     /** Calls isLeapYear to print correct statement. */
