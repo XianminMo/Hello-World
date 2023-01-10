@@ -35,10 +35,10 @@ class GUISource implements InputSource {
     public String getKey() {
         String command = _source.readKey();
         switch (command) {
-        case "â†‘" -> command = "Up";
-        case "â†’" -> command = "Right";
-        case "â†“" -> command = "Down";
-        case "â†" -> command = "Left";
+        case "¡ü" -> command = "Up";
+        case "¡ú" -> command = "Right";
+        case "¡ý" -> command = "Down";
+        case "¡û" -> command = "Left";
         default -> {}
         }
 

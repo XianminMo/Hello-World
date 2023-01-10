@@ -150,9 +150,58 @@ public class Model extends Observable {
      * and the trailing tile does not.
      */
     public void tilt(Side side) {
-        // TODO: Fill in this function.
-
+        _board.setViewingPerspective(side);
+        for (int col = 0; col < _board.size(); col += 1) {
+            colTilt(col);
+        }
+        _board.setViewingPerspective(Side.NORTH);
         checkGameOver();
+    }
+
+    /**
+     * process column respectively
+     */
+    public void colTilt(int col) {
+        int size = _board.size();
+        int j = 0;
+        for (int row = size - 2; row >= 0; row -= 1) {
+            Tile t = _board.tile(col, row);
+            if (t == null) {
+                continue;
+            }
+            int i = row;
+            while (emptyMove(col, i)) {
+                i += 1;
+            }
+            if (i != row && !valueMove(t, col, i)) {
+                _board.move(col, i, t);
+            }else if (valueMove(t, col, i) && i + 1 != j) {
+                _board.move(col, i + 1, t);
+                j = i + 1;
+                _score += 2 * t.value();
+            }else if (valueMove(t, col, i)) {
+                _board.move(col, i, t);
+            }
+
+        }
+    }
+
+
+    /**
+     * Return true if 上一个是null
+     */
+    public boolean emptyMove(int col, int row) {
+        return row + 1 < _board.size() && _board.tile(col, row + 1) == null;
+    }
+
+    /**
+     * Return true if 上一个same value
+     */
+    public boolean valueMove(Tile t, int col, int row) {
+        if (row + 1 < _board.size()) {
+            return _board.tile(col, row + 1).value() == t.value();
+        }
+        return false;
     }
 
     /**
@@ -195,7 +244,7 @@ public class Model extends Observable {
         int size = b.size();
         for (int row = 0; row < size; row += 1) {
             for (int col = 0; col < size; col += 1) {
-                if (b.tile(col, row) == null){
+                if (b.tile(col, row) == null) {
                     continue;
                 }
                 if (b.tile(col, row).value() == MAX_PIECE) {
@@ -213,7 +262,43 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+        for (int row = 0; row < size; row += 1) {
+            for (int col = 0; col < size; col += 1) {
+                if (sameValueAdjacentExists(b, col, row)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Return true if there are two adjacent tiles with the same value.
+     */
+    public static boolean sameValueAdjacentExists(Board b, int col, int row) {
+        int size = b.size();
+        for (int i = -1; i <= 1; i += 1) {
+            if (row + i < 0 || i == 0 || row + i >= size) {
+                continue;
+            }
+            if (b.tile(col, row + i).value() == b.tile(col, row).value()) {
+                return true;
+            }
+        }
+
+        for (int j = -1; j <= 1; j += 1) {
+            if (col + j < 0 || j == 0 || col + j >= size) {
+                continue;
+            }
+            if (b.tile(col + j, row).value() == b.tile(col, row).value()) {
+                return true;
+            }
+        }
+
         return false;
     }
 

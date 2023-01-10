@@ -71,10 +71,10 @@ class GUI extends TopLevel implements Observer {
     String getKey() {
         String command = readKey();
         switch (command) {
-            case "â†‘" -> command = "Up";
-            case "â†’" -> command = "Right";
-            case "â†“" -> command = "Down";
-            case "â†" -> command = "Left";
+            case "¡ü" -> command = "Up";
+            case "¡ú" -> command = "Right";
+            case "¡ý" -> command = "Down";
+            case "¡û" -> command = "Left";
             default -> {}
         }
 
